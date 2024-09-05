@@ -111,11 +111,17 @@ export default function ProgressDemo() {
       const batch = arr.slice(i, i + 1000);
       const result = await Promise.all(
         batch.map(async (p) => {
-          const res = (await callAPI(u, p)) as any;
-          if (res && res.userId) {
-            return p;
+          try {
+            const res = (await callAPI(u, p)) as any;
+            if (res && res.userId) {
+              return p;
+            }
+            return "0";
+          } catch (e) {
+            setProgress(100);
+            setTiming(false);
+            setPassword("Something error");
           }
-          return "0";
         })
       );
       setProgress((i * 100) / 1000000);
