@@ -47,6 +47,7 @@
     "express-rate-limit": "^7.4.0",
     "express-validator": "^7.0.1",
     "formidable": "^3.5.1",
+    "hyper-express": "^6.16.4",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mime": "^3.0.0",
