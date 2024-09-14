@@ -5,7 +5,7 @@ import { hashPassword } from './crypto'
 
 const user: UserType = {
   username: 'abcdef',
-  password: '999999',
+  password: '009999',
   loggedIn: 0,
   loggedAt: null
 }

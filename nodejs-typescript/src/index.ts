@@ -17,12 +17,12 @@ const port = process.env.PORT || 4000
 
 app.use(cors())
 
-// const limiter = rateLimit({
-//   windowMs: 1000,
-//   limit: 5
-// })
+const limiter = rateLimit({
+  windowMs: 1000,
+  limit: 5
+})
 
-// app.use(limiter)
+app.use(limiter)
 
 app.use(express.json())
 app.post('/login', loginController)

